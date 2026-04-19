@@ -3,97 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptBet | Original Crypto Casino</title>
-    <link rel="icon" type="image/png" href="https://cryptologos.cc/logos/solana-sol-logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <title>CryptBet | Pro Casino</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --main-bg: #0f212e; --card-bg: #1a2c38; --accent: #00ff88; --primary: #557086; }
-        body { margin: 0; background: var(--main-bg); color: white; font-family: 'Inter', sans-serif; }
+        :root { --bg: #0f212e; --side: #1a2c38; --card: #213743; --accent: #00ff88; --text: #b1bad3; --hover: #2f4553; --win: #00ff88; --loss: #ff4444; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Sidebar/Nav */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #1a2c38; border-bottom: 2px solid #2f4553; }
-        .logo { font-family: 'Orbitron'; color: var(--accent); font-size: 1.5rem; letter-spacing: 2px; }
+        /* Layout */
+        .sidebar { width: 220px; background: var(--side); padding: 20px; border-right: 2px solid var(--hover); display: flex; flex-direction: column; gap: 10px; }
+        .logo { font-family: 'Orbitron'; font-size: 1.4rem; color: var(--accent); margin-bottom: 30px; }
+        .nav-btn { padding: 12px; border-radius: 6px; cursor: pointer; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover, .nav-btn.active { background: var(--hover); color: white; }
+
+        .main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        header { height: 60px; background: var(--side); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; border-bottom: 2px solid var(--hover); position: sticky; top: 0; z-index: 10; }
+        .balance-pill { background: #071620; padding: 8px 18px; border-radius: 4px; border: 1px solid var(--hover); font-weight: 800; display: flex; gap: 8px; }
+
+        /* Lobby */
+        .content { padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .game-tile { background: var(--card); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; position: relative; }
+        .game-tile:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .game-tile img { width: 100%; height: 220px; object-fit: cover; }
+        .game-label { position: absolute; bottom: 15px; left: 15px; font-weight: 800; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+
+        /* Game Overlay */
+        #game-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
+        .play-area { background: var(--card); width: 1000px; height: 600px; border-radius: 12px; display: flex; position: relative; }
+        .bet-side { width: 300px; background: var(--side); padding: 30px; display: flex; flex-direction: column; gap: 15px; border-right: 1px solid var(--hover); }
+        .visual-side { flex: 1; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 20px; }
         
-        .balance-pill { background: #071620; padding: 10px 20px; border-radius: 50px; font-weight: bold; border: 1px solid #2f4553; display: flex; gap: 10px; }
+        input { background: #0f212e; border: 2px solid var(--hover); padding: 12px; color: white; border-radius: 4px; font-weight: bold; width: 100%; box-sizing: border-box; }
+        .bet-btn { background: var(--accent); color: #000; border: none; padding: 18px; border-radius: 4px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text); z-index: 101; }
 
-        .container { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-
-        /* Game Area */
-        .game-card { background: var(--card-bg); border-radius: 15px; padding: 30px; width: 100%; max-width: 800px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        .bet-input { background: #071620; border: 2px solid #2f4553; padding: 15px; border-radius: 8px; color: white; width: 200px; font-size: 1.2rem; }
-        
-        .btn-play { background: var(--accent); color: #000; border: none; padding: 15px 40px; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; margin-top: 20px; transition: 0.2s; }
-        .btn-play:hover { transform: scale(1.05); filter: brightness(1.1); }
-
-        /* Withdraw Modal */
-        .withdraw-section { margin-top: 40px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px dashed var(--primary); }
-        .limit-text { color: #ff4444; font-size: 0.8rem; margin-top: 5px; }
+        /* Game Specific CSS */
+        #display-main { font-family: 'Orbitron'; font-size: 5rem; color: var(--accent); }
+        #plinko-board { width: 100%; height: 400px; position: relative; overflow: hidden; background: #071620; border-radius: 10px; }
+        .bj-hand { display: flex; gap: 10px; margin: 10px 0; }
+        .card-img { width: 60px; height: 90px; background: white; border-radius: 4px; color: black; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="logo">CRYPTBET</div>
-    <div class="balance-pill">
-        <span style="color: var(--accent)">$</span>
-        <span id="user-balance">0.00</span>
+    <div class="sidebar">
+        <div class="logo">CRYPTBET</div>
+        <div class="nav-btn active" onclick="closeGame()">🏠 Lobby</div>
+        <div class="nav-btn">🎲 Originals</div>
+        <div class="nav-btn">🎰 Slots</div>
+        <div class="nav-btn" style="margin-top: auto; color: var(--loss);">💸 Withdraw ($20)</div>
     </div>
-</nav>
 
-<div class="container">
-    <div class="game-card">
-        <h2 style="font-family: 'Orbitron'">MULTIPLIER</h2>
-        <div style="font-size: 4rem; margin: 30px 0; color: var(--accent)" id="display">1.00x</div>
-        
-        <input type="number" class="bet-input" id="bet-amount" value="1.00">
-        <br>
-        <button class="btn-play" onclick="playGame()">BET</button>
+    <div class="main">
+        <header>
+            <div style="font-weight: bold; color: var(--text);">Stake Originals</div>
+            <div class="balance-pill">
+                <span style="color: var(--accent)">$</span>
+                <span id="balance">1000.00</span>
+            </div>
+        </header>
 
-        <div class="withdraw-section">
-            <h3>Withdrawal</h3>
-            <input type="text" id="wallet-addr" placeholder="Solana Wallet Address" style="width: 80%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none;">
-            <br>
-            <button onclick="requestWithdraw()" style="background: white; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Withdraw Funds</button>
-            <p class="limit-text">Minimum Withdrawal: $20.00 USD equivalent</p>
+        <div class="content">
+            <div class="grid">
+                <div class="game-tile" onclick="openGame('Limbo')">
+                    <img src="https://medium-media.pstake.io/1920/limbo.png">
+                    <div class="game-label">Limbo</div>
+                </div>
+                <div class="game-tile" onclick="openGame('Crash')">
+                    <img src="https://medium-media.pstake.io/1920/crash.png">
+                    <div class="game-label">Crash</div>
+                </div>
+                <div class="game-tile" onclick="openGame('Blackjack')">
+                    <img src="https://medium-media.pstake.io/1920/blackjack.png">
+                    <div class="game-label">Blackjack</div>
+                </div>
+                <div class="game-tile" onclick="openGame('Plinko')">
+                    <img src="https://medium-media.pstake.io/1920/plinko.png">
+                    <div class="game-label">Plinko</div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    let balance = 10.00; // Starting with "Demo" balance
-    document.getElementById('user-balance').innerText = balance.toFixed(2);
+    <div id="game-overlay">
+        <div class="close-btn" onclick="closeGame()">ESC [X]</div>
+        <div class="play-area">
+            <div class="bet-side">
+                <h3 id="side-title" style="font-family: 'Orbitron'; color: var(--accent); margin: 0;">LIMBO</h3>
+                <label>BET AMOUNT</label>
+                <input type="number" id="bet-amount" value="10.00">
+                
+                <div id="limbo-controls">
+                    <label>TARGET MULTIPLIER</label>
+                    <input type="number" id="target-multi" value="2.00">
+                </div>
 
-    function playGame() {
-        const bet = parseFloat(document.getElementById('bet-amount').value);
-        if (bet > balance) return alert("Insufficient funds!");
+                <div id="bj-controls" style="display: none;">
+                    <button class="bet-btn" onclick="bjAction('hit')" style="background: white; margin-bottom: 5px;">HIT</button>
+                    <button class="bet-btn" onclick="bjAction('stand')" style="background: var(--text);">STAND</button>
+                </div>
 
-        balance -= bet;
-        document.getElementById('user-balance').innerText = balance.toFixed(2);
+                <button class="bet-btn" id="main-action-btn" onclick="handlePlay()">BET</button>
+            </div>
 
-        // Simulation of a win/loss
-        const result = Math.random();
-        if (result > 0.5) {
-            const win = bet * 2;
+            <div class="visual-side" id="viewport">
+                <div id="display-main">1.00x</div>
+                <div id="sub-display" style="margin-top: 20px; font-weight: 800;"></div>
+                
+                <div id="blackjack-table" style="display: none; text-align: center;">
+                    <div id="dealer-hand" class="bj-hand"></div>
+                    <div style="color: var(--text); margin: 20px 0;">VS</div>
+                    <div id="player-hand" class="bj-hand"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let balance = 1000.00;
+        let currentGame = 'Limbo';
+        const houseEdge = 0.90; // 10% House Edge ($90% RTP)
+
+        function updateUI() {
+            document.getElementById('balance').innerText = balance.toFixed(2);
+        }
+
+        function openGame(game) {
+            currentGame = game;
+            document.getElementById('game-overlay').style.display = 'flex';
+            document.getElementById('side-title').innerText = game.toUpperCase();
+            
+            // Toggle Controls
+            document.getElementById('limbo-controls').style.display = (game === 'Limbo' || game === 'Crash') ? 'block' : 'none';
+            document.getElementById('bj-controls').style.display = 'none';
+            document.getElementById('blackjack-table').style.display = (game === 'Blackjack') ? 'block' : 'none';
+            document.getElementById('display-main').style.display = (game !== 'Blackjack') ? 'block' : 'none';
+            
+            document.getElementById('display-main').innerText = (game === 'Crash') ? '1.00x' : '0.00x';
+            document.getElementById('sub-display').innerText = '';
+        }
+
+        function closeGame() {
+            document.getElementById('game-overlay').style.display = 'none';
+        }
+
+        function handlePlay() {
+            const bet = parseFloat(document.getElementById('bet-amount').value);
+            if (bet > balance || bet <= 0) return alert("Insufficient Balance");
+
+            if (currentGame === 'Limbo') playLimbo(bet);
+            if (currentGame === 'Crash') playCrash(bet);
+            if (currentGame === 'Blackjack') startBlackjack(bet);
+            if (currentGame === 'Plinko') playPlinko(bet);
+        }
+
+        // --- GAME LOGIC (All with 10% House Edge) ---
+
+        function playLimbo(bet) {
+            balance -= bet;
+            const target = parseFloat(document.getElementById('target-multi').value);
+            const result = (houseEdge / Math.random()).toFixed(2); // 10% Edge formula
+            
+            document.getElementById('display-main').innerText = result + "x";
+            if (parseFloat(result) >= target) {
+                const win = bet * target;
+                balance += win;
+                finishPlay(true, win);
+            } else {
+                finishPlay(false);
+            }
+        }
+
+        function playCrash(bet) {
+            // Simplified Crash: Instant result for static site
+            balance -= bet;
+            const autoCashout = parseFloat(document.getElementById('target-multi').value);
+            const crashAt = (houseEdge / Math.random()).toFixed(2);
+            
+            document.getElementById('display-main').innerText = "Crashed @ " + crashAt + "x";
+            if (parseFloat(crashAt) >= autoCashout) {
+                const win = bet * autoCashout;
+                balance += win;
+                finishPlay(true, win);
+            } else {
+                finishPlay(false);
+            }
+        }
+
+        // Blackjack Logic (Simplified House Edge via Dealer Advantage)
+        let playerTotal = 0;
+        function startBlackjack(bet) {
+            balance -= bet;
+            document.getElementById('main-action-btn').style.display = 'none';
+            document.getElementById('bj-controls').style.display = 'block';
+            
+            playerTotal = Math.floor(Math.random() * 10) + 12; // Start with 12-21
+            document.getElementById('player-hand').innerHTML = `<div class="card-img">${playerTotal}</div>`;
+            document.getElementById('dealer-hand').innerHTML = `<div class="card-img">?</div>`;
+            document.getElementById('sub-display').innerText = "Hit or Stand?";
+        }
+
+        function bjAction(type) {
+            if (type === 'hit') {
+                playerTotal += Math.floor(Math.random() * 10) + 1;
+                document.getElementById('player-hand').innerHTML = `<div class="card-img">${playerTotal}</div>`;
+                if (playerTotal > 21) endBj(false);
+            } else {
+                const dealer = Math.floor(Math.random() * 6) + 17; // Dealer gets 17-22
+                document.getElementById('dealer-hand').innerHTML = `<div class="card-img">${dealer}</div>`;
+                if (dealer > 21 || playerTotal > dealer) endBj(true);
+                else endBj(false);
+            }
+        }
+
+        function endBj(win) {
+            const bet = parseFloat(document.getElementById('bet-amount').value);
+            document.getElementById('main-action-btn').style.display = 'block';
+            document.getElementById('bj-controls').style.display = 'none';
+            if (win) {
+                balance += (bet * 2 * houseEdge); // House edge applied to payout
+                finishPlay(true, bet * 2 * houseEdge);
+            } else {
+                finishPlay(false);
+            }
+        }
+
+        function playPlinko(bet) {
+            balance -= bet;
+            // Plinko Math: Random slot with weights favoring the middle (loss)
+            const outcomes = [5, 2, 0.5, 0.2, 0.5, 2, 5];
+            const result = outcomes[Math.floor(Math.random() * outcomes.length)] * houseEdge;
+            const win = bet * result;
             balance += win;
-            document.getElementById('display').innerText = "2.00x";
-            document.getElementById('display').style.color = "#00ff88";
-            alert("Winner! +$" + win);
-        } else {
-            document.getElementById('display').innerText = "0.00x";
-            document.getElementById('display').style.color = "#ff4444";
+            
+            document.getElementById('display-main').innerText = result.toFixed(1) + "x";
+            finishPlay(win > bet, win);
         }
-        document.getElementById('user-balance').innerText = balance.toFixed(2);
-    }
 
-    function requestWithdraw() {
-        if (balance < 20.00) {
-            alert("Error: You must have at least $20.00 to withdraw.");
-        } else {
-            alert("Withdrawal of $" + balance.toFixed(2) + " initiated to the provided address.");
-            // Here is where you would call your backend API to trigger a real transaction
+        function finishPlay(isWin, amount = 0) {
+            const display = document.getElementById('display-main');
+            const sub = document.getElementById('sub-display');
+            
+            if (isWin) {
+                display.style.color = "var(--win)";
+                sub.innerText = "WIN! +$" + amount.toFixed(2);
+                sub.style.color = "var(--win)";
+            } else {
+                display.style.color = "var(--loss)";
+                sub.innerText = "LOSS";
+                sub.style.color = "var(--loss)";
+            }
+            updateUI();
         }
-    }
-</script>
-
+    </script>
 </body>
 </html>
