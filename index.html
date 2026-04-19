@@ -3,60 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptBet | Pro Casino</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <title>CryptBet | Elite Originals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0f212e; --side: #1a2c38; --card: #213743; --accent: #00ff88; --text: #b1bad3; --hover: #2f4553; --win: #00ff88; --loss: #ff4444; }
+        :root { --bg: #0f212e; --side: #1a2c38; --card: #213743; --accent: #00ff88; --text: #b1bad3; --loss: #ff4444; }
         body { margin: 0; background: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Layout */
-        .sidebar { width: 220px; background: var(--side); padding: 20px; border-right: 2px solid var(--hover); display: flex; flex-direction: column; gap: 10px; }
-        .logo { font-family: 'Orbitron'; font-size: 1.4rem; color: var(--accent); margin-bottom: 30px; }
-        .nav-btn { padding: 12px; border-radius: 6px; cursor: pointer; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .nav-btn:hover, .nav-btn.active { background: var(--hover); color: white; }
+        /* Sidebar & Header */
+        .sidebar { width: 220px; background: var(--side); padding: 20px; border-right: 2px solid #2f4553; display: flex; flex-direction: column; gap: 10px; }
+        .logo { font-family: 'Orbitron'; font-size: 1.4rem; color: var(--accent); margin-bottom: 30px; text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+        .nav-btn { padding: 12px; border-radius: 6px; cursor: pointer; color: var(--text); font-weight: 600; }
+        .nav-btn:hover { background: #2f4553; color: white; }
 
-        .main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        header { height: 60px; background: var(--side); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; border-bottom: 2px solid var(--hover); position: sticky; top: 0; z-index: 10; }
-        .balance-pill { background: #071620; padding: 8px 18px; border-radius: 4px; border: 1px solid var(--hover); font-weight: 800; display: flex; gap: 8px; }
+        .main { flex: 1; display: flex; flex-direction: column; }
+        header { height: 60px; background: var(--side); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; border-bottom: 2px solid #2f4553; }
+        .balance-pill { background: #071620; padding: 8px 18px; border-radius: 4px; border: 1px solid #2f4553; font-weight: 800; }
 
-        /* Lobby */
-        .content { padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .game-tile { background: var(--card); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; position: relative; }
-        .game-tile:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-        .game-tile img { width: 100%; height: 220px; object-fit: cover; }
-        .game-label { position: absolute; bottom: 15px; left: 15px; font-weight: 800; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-
-        /* Game Overlay */
-        #game-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
-        .play-area { background: var(--card); width: 1000px; height: 600px; border-radius: 12px; display: flex; position: relative; }
-        .bet-side { width: 300px; background: var(--side); padding: 30px; display: flex; flex-direction: column; gap: 15px; border-right: 1px solid var(--hover); }
-        .visual-side { flex: 1; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 20px; }
+        /* Game Visuals */
+        #game-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; align-items: center; justify-content: center; }
+        .play-area { background: var(--card); width: 1000px; height: 600px; border-radius: 12px; display: flex; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .bet-side { width: 300px; background: var(--side); padding: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .visual-side { flex: 1; background: #071620; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; position: relative; }
         
-        input { background: #0f212e; border: 2px solid var(--hover); padding: 12px; color: white; border-radius: 4px; font-weight: bold; width: 100%; box-sizing: border-box; }
-        .bet-btn { background: var(--accent); color: #000; border: none; padding: 18px; border-radius: 4px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; }
-        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text); z-index: 101; }
+        /* Animations */
+        #display-val { font-family: 'Orbitron'; font-size: 6rem; color: white; transition: color 0.2s; }
+        
+        /* Crash Rocket */
+        #rocket { width: 80px; position: absolute; bottom: 50px; left: 50px; display: none; transition: all 0.1s linear; transform: rotate(-45deg); }
+        .explosion { position: absolute; width: 150px; display: none; animation: pop 0.3s ease-out; }
+        @keyframes pop { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
 
-        /* Game Specific CSS */
-        #display-main { font-family: 'Orbitron'; font-size: 5rem; color: var(--accent); }
-        #plinko-board { width: 100%; height: 400px; position: relative; overflow: hidden; background: #071620; border-radius: 10px; }
-        .bj-hand { display: flex; gap: 10px; margin: 10px 0; }
-        .card-img { width: 60px; height: 90px; background: white; border-radius: 4px; color: black; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; }
+        /* Plinko Ball */
+        .ball { width: 12px; height: 12px; background: #ff4444; border-radius: 50%; position: absolute; top: 20px; box-shadow: 0 0 10px #ff4444; }
+
+        /* Controls */
+        input { background: #0f212e; border: 2px solid #2f4553; padding: 12px; color: white; border-radius: 4px; font-weight: bold; width: 100%; box-sizing: border-box; }
+        .bet-btn { background: var(--accent); color: #000; border: none; padding: 18px; border-radius: 4px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; transition: 0.2s; }
+        .bet-btn:active { transform: scale(0.95); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; z-index: 101; }
+
+        /* Lobby Grid */
+        .content { padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .game-tile { background: var(--card); border-radius: 12px; overflow: hidden; cursor: pointer; position: relative; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
+        .game-tile:hover { transform: translateY(-8px); border-color: var(--accent); }
+        .game-tile img { width: 100%; height: 240px; object-fit: cover; opacity: 0.8; }
+        .label { position: absolute; bottom: 15px; left: 15px; font-weight: 900; font-family: 'Orbitron'; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="logo">CRYPTBET</div>
-        <div class="nav-btn active" onclick="closeGame()">🏠 Lobby</div>
+        <div class="nav-btn" onclick="location.reload()">🏠 Lobby</div>
         <div class="nav-btn">🎲 Originals</div>
-        <div class="nav-btn">🎰 Slots</div>
-        <div class="nav-btn" style="margin-top: auto; color: var(--loss);">💸 Withdraw ($20)</div>
+        <div class="nav-btn" style="margin-top: auto; color: var(--loss);">💸 Withdraw ($20 Min)</div>
     </div>
 
     <div class="main">
         <header>
-            <div style="font-weight: bold; color: var(--text);">Stake Originals</div>
+            <div style="font-weight: bold; color: var(--text);">CryptBet Originals</div>
             <div class="balance-pill">
                 <span style="color: var(--accent)">$</span>
                 <span id="balance">1000.00</span>
@@ -65,196 +71,166 @@
 
         <div class="content">
             <div class="grid">
-                <div class="game-tile" onclick="openGame('Limbo')">
-                    <img src="https://medium-media.pstake.io/1920/limbo.png">
-                    <div class="game-label">Limbo</div>
-                </div>
                 <div class="game-tile" onclick="openGame('Crash')">
-                    <img src="https://medium-media.pstake.io/1920/crash.png">
-                    <div class="game-label">Crash</div>
+                    <img src="https://blog.stake.com/content/images/2022/10/Crash-1.png">
+                    <div class="label">CRASH</div>
                 </div>
-                <div class="game-tile" onclick="openGame('Blackjack')">
-                    <img src="https://medium-media.pstake.io/1920/blackjack.png">
-                    <div class="game-label">Blackjack</div>
+                <div class="game-tile" onclick="openGame('Limbo')">
+                    <img src="https://blog.stake.com/content/images/2022/10/Limbo.png">
+                    <div class="label">LIMBO</div>
                 </div>
                 <div class="game-tile" onclick="openGame('Plinko')">
-                    <img src="https://medium-media.pstake.io/1920/plinko.png">
-                    <div class="game-label">Plinko</div>
+                    <img src="https://blog.stake.com/content/images/2022/10/Plinko.png">
+                    <div class="label">PLINKO</div>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="game-overlay">
-        <div class="close-btn" onclick="closeGame()">ESC [X]</div>
+        <div class="close-btn" onclick="closeGame()">[X]</div>
         <div class="play-area">
             <div class="bet-side">
-                <h3 id="side-title" style="font-family: 'Orbitron'; color: var(--accent); margin: 0;">LIMBO</h3>
-                <label>BET AMOUNT</label>
-                <input type="number" id="bet-amount" value="10.00">
+                <h2 id="g-name" style="font-family: 'Orbitron'; color: var(--accent);">CRASH</h2>
+                <label style="font-size: 0.7rem; color: var(--text);">BET AMOUNT</label>
+                <input type="number" id="bet-input" value="10.00">
                 
-                <div id="limbo-controls">
-                    <label>TARGET MULTIPLIER</label>
-                    <input type="number" id="target-multi" value="2.00">
-                </div>
+                <label id="target-label" style="font-size: 0.7rem; color: var(--text);">TARGET</label>
+                <input type="number" id="target-input" value="2.00">
 
-                <div id="bj-controls" style="display: none;">
-                    <button class="bet-btn" onclick="bjAction('hit')" style="background: white; margin-bottom: 5px;">HIT</button>
-                    <button class="bet-btn" onclick="bjAction('stand')" style="background: var(--text);">STAND</button>
-                </div>
-
-                <button class="bet-btn" id="main-action-btn" onclick="handlePlay()">BET</button>
+                <button class="bet-btn" id="bet-btn" onclick="startPlay()">BET</button>
             </div>
-
-            <div class="visual-side" id="viewport">
-                <div id="display-main">1.00x</div>
-                <div id="sub-display" style="margin-top: 20px; font-weight: 800;"></div>
-                
-                <div id="blackjack-table" style="display: none; text-align: center;">
-                    <div id="dealer-hand" class="bj-hand"></div>
-                    <div style="color: var(--text); margin: 20px 0;">VS</div>
-                    <div id="player-hand" class="bj-hand"></div>
-                </div>
+            <div class="visual-side" id="stage">
+                <div id="display-val">1.00x</div>
+                <img id="rocket" src="https://cdn-icons-png.flaticon.com/512/1066/1066371.png">
+                <img class="explosion" id="exp" src="https://cdn-icons-png.flaticon.com/512/1076/1076840.png">
+                <div id="plinko-pins"></div>
             </div>
         </div>
     </div>
 
     <script>
         let balance = 1000.00;
-        let currentGame = 'Limbo';
-        const houseEdge = 0.90; // 10% House Edge ($90% RTP)
+        let activeGame = '';
+        let running = false;
 
-        function updateUI() {
-            document.getElementById('balance').innerText = balance.toFixed(2);
-        }
-
-        function openGame(game) {
-            currentGame = game;
+        function openGame(g) {
+            activeGame = g;
             document.getElementById('game-overlay').style.display = 'flex';
-            document.getElementById('side-title').innerText = game.toUpperCase();
-            
-            // Toggle Controls
-            document.getElementById('limbo-controls').style.display = (game === 'Limbo' || game === 'Crash') ? 'block' : 'none';
-            document.getElementById('bj-controls').style.display = 'none';
-            document.getElementById('blackjack-table').style.display = (game === 'Blackjack') ? 'block' : 'none';
-            document.getElementById('display-main').style.display = (game !== 'Blackjack') ? 'block' : 'none';
-            
-            document.getElementById('display-main').innerText = (game === 'Crash') ? '1.00x' : '0.00x';
-            document.getElementById('sub-display').innerText = '';
+            document.getElementById('g-name').innerText = g;
+            document.getElementById('rocket').style.display = (g === 'Crash') ? 'block' : 'none';
+            document.getElementById('display-val').innerText = '1.00x';
+            document.getElementById('display-val').style.color = 'white';
         }
 
-        function closeGame() {
-            document.getElementById('game-overlay').style.display = 'none';
-        }
+        function closeGame() { document.getElementById('game-overlay').style.display = 'none'; }
 
-        function handlePlay() {
-            const bet = parseFloat(document.getElementById('bet-amount').value);
-            if (bet > balance || bet <= 0) return alert("Insufficient Balance");
+        async function startPlay() {
+            if (running) return;
+            const bet = parseFloat(document.getElementById('bet-input').value);
+            const target = parseFloat(document.getElementById('target-input').value);
+            if (bet > balance) return alert("Insufficient Balance");
 
-            if (currentGame === 'Limbo') playLimbo(bet);
-            if (currentGame === 'Crash') playCrash(bet);
-            if (currentGame === 'Blackjack') startBlackjack(bet);
-            if (currentGame === 'Plinko') playPlinko(bet);
-        }
-
-        // --- GAME LOGIC (All with 10% House Edge) ---
-
-        function playLimbo(bet) {
             balance -= bet;
-            const target = parseFloat(document.getElementById('target-multi').value);
-            const result = (houseEdge / Math.random()).toFixed(2); // 10% Edge formula
-            
-            document.getElementById('display-main').innerText = result + "x";
-            if (parseFloat(result) >= target) {
-                const win = bet * target;
-                balance += win;
-                finishPlay(true, win);
-            } else {
-                finishPlay(false);
-            }
+            updateBalance();
+            running = true;
+            document.getElementById('bet-btn').disabled = true;
+
+            if (activeGame === 'Limbo') await animateLimbo(bet, target);
+            if (activeGame === 'Crash') await animateCrash(bet, target);
+            if (activeGame === 'Plinko') await animatePlinko(bet);
+
+            running = false;
+            document.getElementById('bet-btn').disabled = false;
         }
 
-        function playCrash(bet) {
-            // Simplified Crash: Instant result for static site
-            balance -= bet;
-            const autoCashout = parseFloat(document.getElementById('target-multi').value);
-            const crashAt = (houseEdge / Math.random()).toFixed(2);
-            
-            document.getElementById('display-main').innerText = "Crashed @ " + crashAt + "x";
-            if (parseFloat(crashAt) >= autoCashout) {
-                const win = bet * autoCashout;
-                balance += win;
-                finishPlay(true, win);
-            } else {
-                finishPlay(false);
-            }
+        // --- ANIMATIONS ---
+
+        function animateLimbo(bet, target) {
+            return new Promise(resolve => {
+                let current = 1.00;
+                const result = (0.90 / Math.random()); // 10% House Edge
+                const interval = setInterval(() => {
+                    current += (current * 0.1);
+                    document.getElementById('display-val').innerText = current.toFixed(2) + "x";
+                    
+                    if (current >= result) {
+                        clearInterval(interval);
+                        document.getElementById('display-val').innerText = result.toFixed(2) + "x";
+                        if (result >= target) {
+                            balance += (bet * target);
+                            document.getElementById('display-val').style.color = 'var(--accent)';
+                        } else {
+                            document.getElementById('display-val').style.color = 'var(--loss)';
+                        }
+                        updateBalance();
+                        resolve();
+                    }
+                }, 50);
+            });
         }
 
-        // Blackjack Logic (Simplified House Edge via Dealer Advantage)
-        let playerTotal = 0;
-        function startBlackjack(bet) {
-            balance -= bet;
-            document.getElementById('main-action-btn').style.display = 'none';
-            document.getElementById('bj-controls').style.display = 'block';
-            
-            playerTotal = Math.floor(Math.random() * 10) + 12; // Start with 12-21
-            document.getElementById('player-hand').innerHTML = `<div class="card-img">${playerTotal}</div>`;
-            document.getElementById('dealer-hand').innerHTML = `<div class="card-img">?</div>`;
-            document.getElementById('sub-display').innerText = "Hit or Stand?";
+        function animateCrash(bet, target) {
+            return new Promise(resolve => {
+                let current = 1.00;
+                const crashAt = (0.90 / Math.random());
+                const rock = document.getElementById('rocket');
+                rock.style.bottom = '50px'; rock.style.left = '50px';
+                
+                const interval = setInterval(() => {
+                    current += 0.01 + (current * 0.01);
+                    document.getElementById('display-val').innerText = current.toFixed(2) + "x";
+                    
+                    // Move rocket
+                    rock.style.bottom = (50 + (current * 20)) + 'px';
+                    rock.style.left = (50 + (current * 30)) + 'px';
+
+                    if (current >= crashAt) {
+                        clearInterval(interval);
+                        document.getElementById('exp').style.display = 'block';
+                        document.getElementById('exp').style.bottom = rock.style.bottom;
+                        document.getElementById('exp').style.left = rock.style.left;
+                        document.getElementById('display-val').style.color = 'var(--loss)';
+                        
+                        setTimeout(() => { 
+                            document.getElementById('exp').style.display = 'none'; 
+                            if (crashAt >= target) {
+                                balance += (bet * target);
+                                updateBalance();
+                            }
+                            resolve(); 
+                        }, 500);
+                    }
+                }, 40);
+            });
         }
 
-        function bjAction(type) {
-            if (type === 'hit') {
-                playerTotal += Math.floor(Math.random() * 10) + 1;
-                document.getElementById('player-hand').innerHTML = `<div class="card-img">${playerTotal}</div>`;
-                if (playerTotal > 21) endBj(false);
-            } else {
-                const dealer = Math.floor(Math.random() * 6) + 17; // Dealer gets 17-22
-                document.getElementById('dealer-hand').innerHTML = `<div class="card-img">${dealer}</div>`;
-                if (dealer > 21 || playerTotal > dealer) endBj(true);
-                else endBj(false);
-            }
+        function animatePlinko(bet) {
+            return new Promise(resolve => {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                document.getElementById('stage').appendChild(ball);
+                let top = 20; let left = 350;
+                
+                const interval = setInterval(() => {
+                    top += 10;
+                    left += (Math.random() - 0.5) * 40;
+                    ball.style.top = top + 'px';
+                    ball.style.left = left + 'px';
+
+                    if (top > 450) {
+                        clearInterval(interval);
+                        ball.remove();
+                        const win = bet * (Math.random() > 0.8 ? 2 : 0.2); // Simple edge math
+                        balance += win;
+                        updateBalance();
+                        resolve();
+                    }
+                }, 30);
+            });
         }
 
-        function endBj(win) {
-            const bet = parseFloat(document.getElementById('bet-amount').value);
-            document.getElementById('main-action-btn').style.display = 'block';
-            document.getElementById('bj-controls').style.display = 'none';
-            if (win) {
-                balance += (bet * 2 * houseEdge); // House edge applied to payout
-                finishPlay(true, bet * 2 * houseEdge);
-            } else {
-                finishPlay(false);
-            }
-        }
-
-        function playPlinko(bet) {
-            balance -= bet;
-            // Plinko Math: Random slot with weights favoring the middle (loss)
-            const outcomes = [5, 2, 0.5, 0.2, 0.5, 2, 5];
-            const result = outcomes[Math.floor(Math.random() * outcomes.length)] * houseEdge;
-            const win = bet * result;
-            balance += win;
-            
-            document.getElementById('display-main').innerText = result.toFixed(1) + "x";
-            finishPlay(win > bet, win);
-        }
-
-        function finishPlay(isWin, amount = 0) {
-            const display = document.getElementById('display-main');
-            const sub = document.getElementById('sub-display');
-            
-            if (isWin) {
-                display.style.color = "var(--win)";
-                sub.innerText = "WIN! +$" + amount.toFixed(2);
-                sub.style.color = "var(--win)";
-            } else {
-                display.style.color = "var(--loss)";
-                sub.innerText = "LOSS";
-                sub.style.color = "var(--loss)";
-            }
-            updateUI();
-        }
+        function updateBalance() { document.getElementById('balance').innerText = balance.toFixed(2); }
     </script>
 </body>
 </html>
