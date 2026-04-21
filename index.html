@@ -3,120 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reston Eco-Delivery | Biker Board</title>
+    <title>Reston Eco-Delivery | Pro Board</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
             --primary: #10b981;
-            --primary-dark: #059669;
-            --accent: #3b82f6;
-            --bg: #f3f4f6;
-            --card-bg: #ffffff;
-            --text-main: #1f2937;
+            --accent: #38bdf8;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
         }
 
         body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-dark); 
             margin: 0; padding: 20px; 
             color: var(--text-main);
+            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
+            min-height: 100vh;
         }
 
-        .container { max-width: 500px; margin: auto; }
+        .container { max-width: 550px; margin: auto; }
 
-        /* Header */
         .hero { 
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white; padding: 25px; border-radius: 20px; 
-            text-align: center; margin-bottom: 20px;
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2);
+            padding: 40px 20px; text-align: center; margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
-        /* Founder Story Section */
-        .founder-box {
-            background: #ecfdf5; border: 1px solid #d1fae5;
-            padding: 15px; border-radius: 15px; margin-bottom: 20px;
-            font-size: 0.9em; color: #065f46; line-height: 1.4;
+        .hero h1 { margin: 0; font-size: 2.2em; font-weight: 800; letter-spacing: -1px; }
+        .hero p { color: var(--primary); font-weight: 600; text-transform: uppercase; font-size: 0.8em; letter-spacing: 2px; margin-top: 5px; }
+
+        .founder-story {
+            font-size: 0.85em; color: var(--text-dim); line-height: 1.6;
+            padding: 20px; margin-bottom: 30px; border-left: 3px solid var(--primary);
+            background: rgba(16, 185, 129, 0.05);
         }
 
-        /* Order Cards */
         .card { 
-            background: var(--card-bg); padding: 20px; border-radius: 18px; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 15px; 
-            border: 1px solid #e5e7eb; position: relative;
+            background: var(--card-bg); padding: 25px; border-radius: 24px; 
+            margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.2s, border 0.2s;
         }
-        
-        .card.taken { opacity: 0.5; filter: grayscale(1); }
+        .card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .card.taken { opacity: 0.4; filter: grayscale(1); pointer-events: none; }
 
         .btn { 
-            padding: 14px; border: none; border-radius: 12px; 
-            cursor: pointer; font-weight: 700; width: 100%; 
-            transition: 0.2s; margin-top: 10px; font-size: 1em;
+            padding: 16px; border: none; border-radius: 14px; 
+            cursor: pointer; font-weight: 800; width: 100%; 
+            font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.2s;
         }
-        .btn-post { background: var(--primary); color: white; }
-        .btn-accept { background: var(--accent); color: white; }
-        .btn-complete { background: #ef4444; color: white; }
+        .btn-post { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        .btn-accept { background: var(--accent); color: #0f172a; }
+        .btn-complete { background: #f43f5e; color: white; }
 
         .admin-panel { 
-            background: white; padding: 20px; border-radius: 18px; 
-            margin-bottom: 20px; display: none; border: 2px solid var(--primary);
+            background: #1e293b; padding: 25px; border-radius: 24px; 
+            margin-bottom: 30px; display: none; border: 1px solid var(--primary);
         }
 
         input { 
-            width: 100%; padding: 12px; margin: 6px 0; 
-            border: 1px solid #d1d5db; border-radius: 10px; 
-            box-sizing: border-box; font-size: 16px;
+            width: 100%; padding: 14px; margin: 8px 0; 
+            background: #0f172a; border: 1px solid #334155; 
+            border-radius: 12px; color: white; font-size: 15px;
         }
+        input:focus { outline: none; border-color: var(--primary); }
 
-        .address-group {
-            background: #f8fafc; padding: 10px; border-radius: 10px;
-            margin: 10px 0; border: 1px solid #e2e8f0;
+        .addr-chip {
+            background: rgba(15, 23, 42, 0.5); padding: 12px; 
+            border-radius: 12px; margin: 10px 0; border: 1px solid #334155;
         }
-        .address-label { font-size: 0.7em; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
-        .address-text { font-size: 0.95em; font-weight: 600; color: var(--accent); }
+        .label { font-size: 10px; color: var(--text-dim); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+        .val { font-size: 14px; font-weight: 600; color: var(--accent); }
+
+        .badge-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .pay-badge { font-size: 1.2em; font-weight: 800; color: var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="hero">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-size: 0.75em; font-weight: 800; letter-spacing: 1px;">RESTON 20194</span>
-            <button onclick="checkAdmin()" id="admin-lock" style="background:none; border:1px solid white; color:white; border-radius:6px; padding:4px 8px; cursor:pointer; font-size: 0.7em;">ADMIN</button>
-        </div>
-        <h1 style="margin:0; font-size: 1.8em;">Eco-Delivery</h1>
-        <p style="margin:5px 0 0; opacity: 0.9; font-size: 0.9em;">Fast. Green. Local.</p>
+        <button onclick="checkAdmin()" id="lock" style="float:right; background:none; border:none; color:var(--text-dim); cursor:pointer;">⚙️</button>
+        <p>Reston, VA // 20194</p>
+        <h1>Eco-Delivery</h1>
     </div>
 
-    <div class="founder-box">
-        <strong style="display:block; margin-bottom: 5px;">Riley's Mission:</strong>
-        I'm 14 and I built this to stop DoorDash's crazy fees from hurting Reston restaurants. We deliver on e-bikes to keep our air clean and prices fair.
+    <div class="founder-story">
+        <strong>RILEY (FOUNDER):</strong> I'm 14 years old and built this to cut out corporate fees. We use e-bikes to keep Reston green and delivery prices fair for our local restaurants.
     </div>
 
     <div id="admin-panel" class="admin-panel">
-        <h3 style="margin-top:0;">New Dispatch</h3>
-        <input type="text" id="rest-name" placeholder="Restaurant Name">
-        <input type="text" id="rest-addr" placeholder="Pickup Address">
-        <input type="text" id="items" placeholder="What's in the order?">
-        <input type="text" id="deliv-addr" placeholder="Delivery Address">
+        <h3 style="margin:0 0 15px 0;">New Dispatch</h3>
+        <input type="text" id="r-name" placeholder="Restaurant Name">
+        <input type="text" id="r-addr" placeholder="Restaurant Street Address">
+        <input type="text" id="items" placeholder="Order Details (Items)">
+        <input type="text" id="d-addr" placeholder="Delivery Street Address">
         <div style="display:flex; gap:10px;">
-            <input type="number" id="total" placeholder="Total $">
             <input type="number" id="pay" placeholder="Biker Pay $">
         </div>
-        <button onclick="postOrder()" class="btn btn-post">Send to Board</button>
+        <button onclick="postOrder()" class="btn btn-post">Confirm Dispatch</button>
     </div>
 
-    <div id="order-list">
-        <p style="text-align:center; color:#94a3b8;">Connecting to Reston network...</p>
-    </div>
+    <div id="order-list"></div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Your confirmed Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyAPdW-0WhvsGk4Lbgjrp08QBnR0QBOJ44k",
         authDomain: "reston-delivery.firebaseapp.com",
@@ -132,73 +135,67 @@
     const ordersRef = ref(db, 'orders');
 
     window.checkAdmin = () => {
-        if (prompt("Enter Password:") === "reston_go") {
+        if (prompt("Access Key:") === "reston_go") {
             document.getElementById('admin-panel').style.display = 'block';
-            document.getElementById('admin-lock').style.display = 'none';
+            document.getElementById('lock').style.display = 'none';
         }
     };
 
     window.postOrder = () => {
-        const payload = {
-            restaurant: document.getElementById('rest-name').value,
-            pickup: document.getElementById('rest-addr').value,
-            orderItems: document.getElementById('items').value,
-            delivery: document.getElementById('deliv-addr').value,
-            total: document.getElementById('total').value,
+        push(ordersRef, {
+            res: document.getElementById('r-name').value,
+            res_a: document.getElementById('r-addr').value,
+            it: document.getElementById('items').value,
+            del_a: document.getElementById('d-addr').value,
             pay: document.getElementById('pay').value,
-            status: "available",
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-        push(ordersRef, payload);
+            status: "open",
+            at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
         document.querySelectorAll('input').forEach(i => i.value = '');
     };
 
-    onValue(ordersRef, (snapshot) => {
+    onValue(ordersRef, (snap) => {
         const list = document.getElementById('order-list');
         list.innerHTML = '';
-        const data = snapshot.val();
-        
-        if (!data) {
-            list.innerHTML = '<p style="text-align:center; color:#9ca3af; margin-top:30px;">Reston is quiet. No active orders.</p>';
-            return;
-        }
+        const data = snap.val();
+        if(!data) return list.innerHTML = '<div style="text-align:center; color:var(--text-dim);">No active dispatches.</div>';
 
-        Object.entries(data).reverse().forEach(([id, order]) => {
-            const isTaken = order.status === "taken";
+        Object.entries(data).reverse().forEach(([id, o]) => {
+            const taken = o.status === "busy";
             const card = document.createElement('div');
-            card.className = `card ${isTaken ? 'taken' : ''}`;
-            
+            card.className = `card ${taken ? 'taken' : ''}`;
             card.innerHTML = `
-                <h2 style="margin:0 0 5px 0; font-size:1.4em;">${order.restaurant}</h2>
-                <p style="color:#6b7280; margin:0 0 15px 0; font-weight:500;">${order.orderItems}</p>
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                    <h2 style="margin:0; font-size:1.4em;">${o.res}</h2>
+                    <span style="font-size:0.7em; color:var(--text-dim);">${o.at}</span>
+                </div>
+                <p style="color:var(--text-dim); margin:8px 0 15px 0;">${o.it}</p>
                 
-                <div class="address-group">
-                    <div class="address-label">Pickup From:</div>
-                    <div class="address-text">📍 ${order.pickup}</div>
+                <div class="addr-chip">
+                    <div class="label">Pickup</div>
+                    <div class="val">📍 ${o.res_a}</div>
                 </div>
 
-                <div class="address-group">
-                    <div class="address-label">Deliver To:</div>
-                    <div class="address-text">🏠 ${order.delivery}</div>
+                <div class="addr-chip">
+                    <div class="label">Drop-off</div>
+                    <div class="val">🏠 ${o.del_a}</div>
                 </div>
 
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-                    <div style="background:#dcfce7; color:#166534; padding:6px 12px; border-radius:8px; font-weight:800;">
-                        PAY: $${order.pay}
+                <div class="badge-row">
+                    <div class="pay-badge">$${o.pay}</div>
+                    <div style="width:140px;">
+                        ${taken ? 
+                            `<button onclick="finish('${id}')" class="btn btn-complete">Done</button>` : 
+                            `<button onclick="accept('${id}')" class="btn btn-accept">Accept</button>`
+                        }
                     </div>
-                    <span style="font-size:0.7em; color:#9ca3af; font-weight:600;">${order.time}</span>
                 </div>
-
-                ${isTaken ? 
-                    `<button onclick="finish('${id}')" class="btn btn-complete">Complete Order</button>` : 
-                    `<button onclick="accept('${id}')" class="btn btn-accept">Accept Order</button>`
-                }
             `;
             list.appendChild(card);
         });
     });
 
-    window.accept = (id) => update(ref(db, `orders/${id}`), { status: "taken" });
+    window.accept = (id) => update(ref(db, `orders/${id}`), { status: "busy" });
     window.finish = (id) => remove(ref(db, `orders/${id}`));
 </script>
 </body>
